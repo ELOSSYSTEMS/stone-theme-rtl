@@ -1,36 +1,4 @@
-# AGENTS.md
-
-> **CRITICAL**: This repository is managed by a strict governance framework.
-
-## 1. Prime Directive
-You do not have permission to ignore /docs/.
-Before attempting any task, you must understand the rules in:
-- /docs/GLOBAL_ANTIGRAVITY_RULES.md
-- /docs/CANONICAL_INDEX.md
-
-## 2. Source of Truth
-- **Architecture**: /docs/01_ARCHITECTURE_CONTRACT.md
-- **Product Spec**: /docs/00_MASTER_SPEC.md
-- **Design Tokens**: /docs/06_DESIGN_TOKENS.md
-
----
-# AGENTS.md
-
-> **CRITICAL**: This repository is managed by a strict governance framework.
-
-## 1. Prime Directive
-You do not have permission to ignore /docs/.
-Before attempting any task, you must understand the rules in:
-- /docs/GLOBAL_ANTIGRAVITY_RULES.md
-- /docs/CANONICAL_INDEX.md
-
-## 2. Source of Truth
-- **Architecture**: /docs/01_ARCHITECTURE_CONTRACT.md
-- **Product Spec**: /docs/00_MASTER_SPEC.md
-- **Design Tokens**: /docs/06_DESIGN_TOKENS.md
-
----
-# AGENTS.md
+# [Agent Name] Operating Instructions
 
 > **CRITICAL**: This repository is managed by a strict governance framework.
 
@@ -1532,7 +1500,5 @@ Schema locale files, saved with a .schema.json extension, store translation stri
 }
 {% endschema %}
 ```
-
-
 
 
