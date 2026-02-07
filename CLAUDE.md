@@ -1,0 +1,1 @@
+C:/github/my-theme/AGENTS.md

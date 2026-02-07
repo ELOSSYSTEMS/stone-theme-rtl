@@ -1,0 +1,128 @@
+# MASTER_THEME_SPEC — Hebrew-First RTL Shopify Theme (Skeleton Base)
+
+## 0) Canonical Rule
+This document is the single source of truth for all work in this repo.
+Any instruction conflict: this file wins unless an explicit override is added here.
+
+## 1) Base + Eligibility
+- This theme is built from Shopify **Skeleton Theme** as the foundation. :contentReference[oaicite:2]{index=2}
+- Keep the theme architecture modular and maintainable using Shopify best practices. :contentReference[oaicite:3]{index=3}
+
+## 2) License / Use Constraints (Non-negotiable)
+This repo includes an MIT license with a Shopify-specific usage restriction:
+- Rights may only be exercised to develop themes that integrate/interoperate with Shopify services and, if applicable, distribute them via the Shopify Theme Store. :contentReference[oaicite:4]{index=4}
+Do not repurpose the code for non-Shopify products.
+
+## 3) Theme Architecture (Directory Contract)
+Follow Skeleton’s structure strictly. :contentReference[oaicite:5]{index=5} :contentReference[oaicite:6]{index=6}
+
+assets/ blocks/ config/ layout/
+locales/ sections/ snippets/ templates/
+
+ruby
+Copy code
+
+Definitions:
+- **sections/**: full-width configurable modules, require `{% schema %}`. :contentReference[oaicite:7]{index=7}
+- **blocks/**: reusable, nestable components with `{% schema %}`; use `{% doc %}` header when statically rendered. :contentReference[oaicite:8]{index=8}
+- **snippets/**: reusable fragments via `render`; must have `{% doc %}` header. :contentReference[oaicite:9]{index=9}
+- **layout/**: top-level wrappers; must include `{{ content_for_header }}` and `{{ content_for_layout }}`. :contentReference[oaicite:10]{index=10}
+- **assets/**: keep only `critical.css` and truly global/static assets; otherwise prefer `{% stylesheet %}` / `{% javascript %}` inside sections/blocks/snippets. :contentReference[oaicite:11]{index=11}
+
+## 4) Dev Workflow (CLI)
+- Local preview: `shopify theme dev` :contentReference[oaicite:12]{index=12}
+- Use small, reversible commits. Maintain a clean history.
+
+## 5) Styling + JS Rules
+- Use `{% stylesheet %}` and `{% javascript %}` per component (sections/blocks/snippets only). :contentReference[oaicite:13]{index=13}
+- Each file can have only one `{% stylesheet %}` and one `{% javascript %}` tag. :contentReference[oaicite:14]{index=14}
+- `assets/critical.css` contains only CSS needed on every page. :contentReference[oaicite:15]{index=15}
+
+## 6) Liquid Conventions (Readability + Safety)
+- Use whitespace-trim delimiters intentionally (`{{- -}}`, `{%- -%}`). :contentReference[oaicite:16]{index=16}
+- Avoid complex boolean expressions. Use nested `if` (Liquid has no parentheses). :contentReference[oaicite:17]{index=17}
+
+## 7) Translation & Localization (Hebrew-First Standard)
+### 7.1 Storefront text
+- Every user-facing string must be a translation key using `{{ 'key' | t }}`. :contentReference[oaicite:18]{index=18}
+- Use interpolation for variables (`t: min: ..., max: ...`). :contentReference[oaicite:19]{index=19}
+- Keep keys descriptive, hierarchical, max ~3 levels deep, snake_case. :contentReference[oaicite:20]{index=20}
+
+### 7.2 Theme Editor (schema) text
+- Theme editor labels/names must be translatable via schema locale files (`*.schema.json`). :contentReference[oaicite:21]{index=21}
+- Use `t:` references inside `{% schema %}` for labels/options/presets.
+
+### 7.3 Hebrew-first policy
+- Treat Hebrew as primary: implement `he` locale early and keep it complete.
+- Ensure bidi correctness: RTL layout with LTR islands for numbers/prices/emails/URLs.
+
+## 8) RTL / Bidi Engineering Requirements (Hard Requirements)
+### 8.1 Direction strategy
+- Global `html[dir="rtl"]` is supported; all layout primitives must work in both directions.
+- Use logical properties where possible:
+  - `margin-inline-start/end`, `padding-inline-start/end`
+  - `inset-inline-start/end`
+  - `text-align: start/end`
+- For icons/arrows/chevrons:
+  - Mirror via `transform: scaleX(-1)` or swap assets when `dir="rtl"`.
+
+### 8.2 LTR islands (must not break)
+Mark these components as forced LTR:
+- currency/price strings (when needed), emails, URLs, SKUs, coupon codes, numeric inputs.
+Implementation: `dir="ltr"` + `unicode-bidi: plaintext;` (or `isolate`) for mixed content.
+
+### 8.3 Navigation + drawers
+- Mobile drawer: open/close gestures, overlay close targets, and alignment must be RTL-correct.
+- Breadcrumbs and pagination must read correctly in Hebrew.
+
+## 9) Component Authoring Rules
+### 9.1 LiquidDoc required
+- Snippets must include `{% doc %}` header. :contentReference[oaicite:22]{index=22}
+- Blocks rendered statically must include `{% doc %}`. :contentReference[oaicite:23]{index=23}
+
+### 9.2 Schema authoring rules
+- Single CSS property → CSS variable. Multiple → class toggles. :contentReference[oaicite:24]{index=24}
+- Mobile columns use select input pattern. :contentReference[oaicite:25]{index=25}
+
+## 10) Quality Gates (Definition of Done)
+A change is “done” only if:
+1) No raw user-facing strings are added (must be `t` keys). :contentReference[oaicite:26]{index=26}
+2) RTL + LTR both render correctly for:
+   - header, footer, menu/drawer
+   - homepage sections
+   - collection, product, cart
+   - search, pages, blog/article (if included)
+3) No layout regressions on mobile widths.
+4) Section settings are stable in Theme Editor and labels are translatable.
+5) CSS/JS stays component-scoped unless truly global.
+
+## 11) Working With Antigravity / ChatGPT (Instruction Contract)
+When generating code:
+- Prefer new sections/blocks/snippets over editing core layout unless required.
+- Output must include:
+  - target file path(s)
+  - complete code blocks ready to paste
+  - brief checklist to validate in `shopify theme dev`
+
+## 12) Next Steps (Planned Build Order)
+Phase 1 — Foundations:
+- `critical.css`: bidi tokens + type scale + spacing scale.
+- Locale scaffolding: `en.default.json`, `en.default.schema.json`, `he.json`, `he.schema.json`.
+
+Phase 2 — Global Shell:
+- `layout/theme.liquid`: head/meta, global wrappers, content injection.
+- Header + navigation + drawer (RTL correct).
+
+Phase 3 — Commerce Core:
+- Product card block
+- Collection grid section
+- PDP gallery + buy box blocks
+- Cart drawer section/snippet
+
+Phase 4 — Hebrew-first polish:
+- Microcopy, accessibility labels, error states translated.
+- Bidi edge-case audit (numbers + mixed strings).
+
+---
+
+END OF MASTER_THEME_SPEC
